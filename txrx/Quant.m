@@ -9,9 +9,18 @@ classdef Quant
                 aq=1;
             end
             if (nb==0)
+                % No quantization
                 y=x;
-            else
+            elseif isreal(x)
+                % Perform quantization for real signals
                 y = (max( min(round(aq*x-0.5),2^(nb-1)-1),-2^(nb-1))+0.5)/aq;
+            else
+                % Perform for IQ
+                xr = real(x);
+                xi = imag(x);
+                yr = (max( min(round(aq*xr-0.5),2^(nb-1)-1),-2^(nb-1))+0.5)/aq;
+                yi = (max( min(round(aq*xi-0.5),2^(nb-1)-1),-2^(nb-1))+0.5)/aq;
+                y = yr + 1i*yi;                
             end
         end
         
